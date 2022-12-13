@@ -20,12 +20,13 @@ const resolvers = {
     },
   },
   Mutation: {
-    addNotification: (parent, { title, content, userId }) => {
+    addNotification: (parent, { type, title, content, userId }) => {
       return new Promise((resolve, reject) => {
         createNotification(
           (data) => {
             resolve(data);
           },
+          type,
           title,
           content,
           userId
@@ -49,8 +50,9 @@ const fetchAllNotifications = (callback) => {
 };
 
 // Example
-// mutation Mutation($title: String, $content: String, $userId: String) {
-//   addNotification(title: $title, content: $content, userId: $userId) {
+// mutation Mutation($type: String, $title: String, $content: String, $userId: String) {
+//   addNotification(type: $type, title: $title, content: $content, userId: $userId) {
+//     type
 //     content
 //     creationDate
 //     id
@@ -60,15 +62,17 @@ const fetchAllNotifications = (callback) => {
 // }
 // Variables:
 // {
+//   "type": "payin",
 //   "title": "Payment received!",
 //   "content": "You have received a payment from Lupita Estrada. The amount is $1,700 MXN.",
 //   "userId": "2g425er0-9274-4d47-81c8-9301fc477bf2",
 // }
 
-const createNotification = (callback, title, content, userId) => {
+const createNotification = (callback, type, title, content, userId) => {
   const newDocRef = db.collection("notifications").doc();
   const docData = {
     id: newDocRef.id,
+    type,
     title,
     content,
     userId,
