@@ -72,7 +72,7 @@ const createNotification = (callback, title, content, userId) => {
     title,
     content,
     userId,
-    creationDate: new Date(),
+    creationDate: Date.now(),
   };
   newDocRef
     .set(docData)
